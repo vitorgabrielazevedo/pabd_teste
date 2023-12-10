@@ -3,6 +3,8 @@ from tkinter import messagebox
 import qrcode
 import psycopg2
 
+texto_resposta = ""
+
 class Banco():
     def __init__(self):
         self.conn = psycopg2.connect(
@@ -56,19 +58,18 @@ texto_resposta1 = Entry(width = 45)
 texto_resposta1.grid(column = 1, row = 2, columnspan = 2)
 
 texto2 = Label(janela, text = "URL: ")
-texto2.grid(column = 2, row = 2, padx = 10, pady = 10)
+texto2.grid(column = 0, row = 3, padx = 10, pady = 10)
 
 texto_resposta2 = Entry(width = 45)
-texto_resposta2.grid(column = 3, row = 2, columnspan = 2)
+texto_resposta2.grid(column = 1, row = 3, columnspan = 2)
 
 texto3 = Label(janela, text = "QRCODE_PATH: ")
-texto3.grid(column = 4, row = 2, padx = 10, pady = 10)
+texto3.grid(column = 0, row = 4, padx = 10, pady = 10)
 
 texto_resposta3 = Entry(width = 45)
-texto_resposta3.grid(column = 5, row = 2, columnspan = 2)
+texto_resposta3.grid(column = 1, row = 4, columnspan = 2)
 
 botao = Button(janela, text = "Gerar QRCode", command = gerar_qr_code)
-botao.grid(column = 6, row = 3, padx = 10, pady = 10)
+botao.grid(column = 0, row = 5, padx = 10, pady = 10)
 
 janela.mainloop()
-
