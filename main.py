@@ -20,8 +20,27 @@ class Banco():
         self.cursor.execute("INSERT INTO tbcodes (id_code, url, qrcode_path) VALUES ({}, '{}', '{}')".format(id, url, path))
         self.conn.commit()
 
+    '''InsertOne com tratamento de exceções'''
+    def insertOne(self, id, url, path):
+        try:
+            self.cursor.execute("INSERT INTO tbcodes (id_code, url, qrcode_path) VALUES ({}, '{}', '{}')".format(id, url, path))
+        except psycopg2.Error as e:
+            print("ERROR:", e.pgcode)
+            self.conn.rollback()
+        self.conn.commit()
+
+    '''def selectAll(self):
+        self.cursor.execute("select * from tbcodes")
+        return self.cursor.fetchall()'''
+
+    def selectAll(self, id):
+        self.cursor.execute("select * from tbcodes where id_code = {}".format(id))
+        return self.cursor.fetchall()
+
 def gerar_qr_code():
-    url = texto_resposta.get()
+    id = texto_resposta1.get()
+    url = texto_resposta2.get()
+    qrcode_path = texto_resposta3.get()
     
     if (len(url) == 0):
         messagebox.showinfo(
@@ -44,7 +63,12 @@ def gerar_qr_code():
             img = qr.make_image(fill_color = 'black', back_color = 'white')
             img_save = 'qrExport.png'
             img.save(img_save)
-            banco.insertOne(2, url, 'qrCode.png')
+            banco.insertOne(id, url, qrcode_path)
+
+def ler_qr_code():
+    global banco
+    id = texto_resposta1.get()
+    print(banco.selectAll(id))
 
 banco = Banco()
 
@@ -71,5 +95,8 @@ texto_resposta3.grid(column = 1, row = 4, columnspan = 2)
 
 botao = Button(janela, text = "Gerar QRCode", command = gerar_qr_code)
 botao.grid(column = 0, row = 5, padx = 10, pady = 10)
+
+botao_select = Button(text = "Ler QRCodes do BD", width = 25, command = ler_qr_code)
+botao_select.grid(column = 0, row = 6, padx = 10, pady = 10)
 
 janela.mainloop()
